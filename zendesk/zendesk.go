@@ -35,6 +35,7 @@ type Client interface {
 	DeleteTicket(int64) error
 	DeleteUser(int64) (*User, error)
 	DeleteOrganizationMembershipByID(int64) error
+	ListArticles(string, *ListArticlesOptions) ([]Article, error)
 	ListIdentities(int64) ([]UserIdentity, error)
 	ListLocales() ([]Locale, error)
 	ListOrganizationMembershipsByUserID(id int64) ([]OrganizationMembership, error)
@@ -270,6 +271,8 @@ func unmarshall(res *http.Response, out interface{}) error {
 
 // APIPayload represents the payload of an API call.
 type APIPayload struct {
+	Article                    *Article                   `json:"article"`
+	Articles                   []Article                  `json:"articles"`
 	Attachment                 *Attachment                `json:"attachment"`
 	Attachments                []Attachment               `json:"attachments"`
 	Audits                     []TicketAudit              `json:"audits,omitempty"`
@@ -374,6 +377,7 @@ func String(s string) *string {
 
 // ListResponse is a holder for the various returns from the list apis
 type ListResponse struct {
+	Articles     []Article
 	Comments     []TicketComment
 	Tickets      []Ticket
 	Users        []User
